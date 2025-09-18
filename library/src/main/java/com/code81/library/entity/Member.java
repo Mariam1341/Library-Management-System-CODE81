@@ -1,6 +1,7 @@
 package com.code81.library.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Entity
@@ -17,6 +18,7 @@ public class Member {
     private Long id;
 
     private String name;
+
 
     private String email;
 

@@ -7,7 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "books")
+@Table(name = "books", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "isbn")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,6 +23,7 @@ public class Book {
 
     private String title;
 
+    @Column(nullable = false, unique = true)
     private String isbn;
 
     private Integer edition;
