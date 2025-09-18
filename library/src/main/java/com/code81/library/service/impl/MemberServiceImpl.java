@@ -7,21 +7,18 @@ import com.code81.library.exception.ResourceNotFoundException;
 import com.code81.library.mapper.MemberMapper;
 import com.code81.library.repository.MemberRepository;
 import com.code81.library.service.MemberService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 
 @Service
+@AllArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
 
-    public MemberServiceImpl(MemberRepository memberRepository,
-                             MemberMapper memberMapper) {
-        this.memberRepository = memberRepository;
-        this.memberMapper = memberMapper;
-    }
 
     @Override
     public MemberDTO createMember(MemberDTO memberDTO) {

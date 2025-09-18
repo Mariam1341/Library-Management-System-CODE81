@@ -21,7 +21,7 @@ public class Category {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent_id", nullable = true)
     private Category parent;
 
     @OneToMany(mappedBy = "parent")

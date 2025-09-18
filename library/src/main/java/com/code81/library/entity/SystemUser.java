@@ -1,10 +1,11 @@
 package com.code81.library.entity;
 
+import com.code81.library.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "system_users", uniqueConstraints = {
+@Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username")
 })
 @Getter

@@ -2,6 +2,7 @@ package com.code81.library.controller;
 
 import com.code81.library.dto.ApiResponse;
 import com.code81.library.dto.SystemUserDTO;
+import com.code81.library.enums.Role;
 import com.code81.library.service.SystemUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,36 +17,41 @@ public class SystemUserController {
 
     private final SystemUserService userService;
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<SystemUserDTO>> createUser(@RequestBody SystemUserDTO dto) {
-        SystemUserDTO created = userService.createUser(dto);
-        return ResponseEntity.ok(new ApiResponse<>(true, "User created successfully", created));
+    // ====== Get All Librarians ======
+    @GetMapping("/librarians")
+    public ResponseEntity<ApiResponse<List<SystemUserDTO>>> getAllLibrarians() {
+        return ResponseEntity.ok(
+                new ApiResponse<>(true, "List of librarians",
+                        userService.getUsersByRole(Role.LIBRARIAN))
+        );
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<SystemUserDTO>> updateUser(
-            @PathVariable Long id,
-            @RequestBody SystemUserDTO dto) {
-        SystemUserDTO updated = userService.updateUser(id, dto);
-        return ResponseEntity.ok(new ApiResponse<>(true, "User updated successfully", updated));
+    // ====== Get All Staff ======
+    @GetMapping("/staff")
+    public ResponseEntity<ApiResponse<List<SystemUserDTO>>> getAllStaff() {
+        return ResponseEntity.ok(
+                new ApiResponse<>(true, "List of staff",
+                        userService.getUsersByRole(Role.STAFF))
+        );
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok(new ApiResponse<>(true, "User deleted successfully", null));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<SystemUserDTO>> getUserById(@PathVariable Long id) {
-        SystemUserDTO user = userService.getUserById(id);
-        return ResponseEntity.ok(new ApiResponse<>(true, "User retrieved successfully", user));
-    }
-
+    // ====== Get All Users ======
     @GetMapping
     public ResponseEntity<ApiResponse<List<SystemUserDTO>>> getAllUsers() {
-        List<SystemUserDTO> users = userService.getAllUsers();
-        return ResponseEntity.ok(new ApiResponse<>(true, "Users retrieved successfully", users));
+        return ResponseEntity.ok(
+                new ApiResponse<>(true, "List of all users", userService.getAllUsers())
+        );
     }
-}
 
+    // ====== Get User by ID ======
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<SystemUserDTO>> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                new ApiResponse<>(true, "User found", userService.getUserById(id))
+        );
+    }
+
+
+
+
+}
