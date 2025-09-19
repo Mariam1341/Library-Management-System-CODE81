@@ -185,7 +185,8 @@ The system exposes a RESTful API with role-based access control.
 ## 📝 Activity Logging
 
 - All **critical actions** (`create`, `update`, `delete`, `borrow`, `return`) are automatically logged using a custom **Spring AOP Aspect**.  
-- A custom annotation `@LogActivity` is also supported for marking extra methods that should be logged.  
+- A custom annotation `@LogActivity` is also supported for marking extra methods that should be logged.
+-  Logs are stored via the `UserActivityLogService` and can be extended for persistence (e.g., database, file storage, or monitoring tools).
 
 Each log entry records:  
 - **Username** of the acting user  
@@ -193,7 +194,7 @@ Each log entry records:
 - **Target class & method**  
 - **Timestamp** 
 
-Logs are stored via the `UserActivityLogService` and can be extended for persistence (e.g., database, file storage, or monitoring tools).
+
 ---
 
 ## 🚀 Future Improvements
