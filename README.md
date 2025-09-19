@@ -71,6 +71,55 @@ The system is designed to be **scalable, secure, and extensible**, following cle
 
 ---
 
+## 🎯 Design Choices
+
+### 📊 Database Design
+- **Books & Authors (Many-to-Many):**  
+  A book can have multiple authors and an author can write multiple books, so we created a join table `BOOK_AUTHORS` instead of adding a single `author` column in `BOOKS`.  
+
+- **Categories (Hierarchical Structure):**  
+  Each category has a `parent_id` (nullable) to allow sub-categories. This supports multi-level classification like *Fiction → Science Fiction → Space Opera*.  
+
+- **Publishers (One-to-Many):**  
+  Each book has a single publisher, modeled as a foreign key in `BOOKS`.  
+
+- **Members vs. System Users:**  
+  We separated `MEMBERS` (borrowers) from `SYSTEM_USERS` (admins, librarians, staff).  
+  - Members are library clients, they don’t log in.  
+  - System users authenticate and have roles with different permissions.  
+
+- **Borrowing Transactions:**  
+  A dedicated table tracks which member borrowed which book, when it was borrowed, due date, return date, and which system user processed the transaction.  
+
+- **Password Storage:**  
+  User passwords are stored hashed using BCrypt, never in plain text.  
+
+---
+
+### 🏛️ Software Architecture Design
+- **Layered Architecture:**  
+  - **Controller → Service → Repository → Entity/DTO**  
+  This separation of concerns makes the system easier to maintain, test, and extend.  
+
+- **DTO + MapStruct:**  
+  We used DTOs to decouple API responses from database entities. MapStruct auto-generates mappers, avoiding manual boilerplate code.  
+
+- **Lombok:**  
+  Used to reduce boilerplate (getters, setters, constructors, builders).  
+
+- **Spring Security (Basic Auth):**  
+  Implemented Basic Auth as requested in the task, with role-based access control (RBAC) for Admin, Librarian, and Staff.  
+
+- **Role Separation:**  
+  - **Admin:** Manage system users (create/update/delete staff & librarians).  
+  - **Librarian:** Manage books, categories, authors, publishers, and transactions.  
+  - **Staff:** Manage members and borrowing/return operations.  
+
+- **Activity Logging with AOP:**  
+  Instead of adding logging manually in every service, we used Spring AOP with custom annotations to automatically log create/update/delete/borrow/return operations.  
+
+---
+
 ## 🗄 Database Schema & ERD
 
 The system follows a normalized relational database schema to ensure data consistency and scalability.
@@ -96,6 +145,37 @@ The system follows a normalized relational database schema to ensure data consis
 ### 📌 ERD (Entity Relationship Diagram)
 
 <img width="1097" height="525" alt="Library" src="https://github.com/user-attachments/assets/76b513dd-a859-4e1e-973d-47775f0ecf1f" />
+
+---
+
+## 🛠 Setup and Installation
+
+1. **Prerequisites**:
+   - Java 21
+   - MySQL database
+   - Maven
+
+2. **Database Setup**:
+   - Create a MySQL database named `library_db`
+   - Update the database credentials in `src/main/resources/application.properties` if needed
+
+3. **Configuration**:
+   - Update database credentials in `application.properties` if different from defaults
+
+## Running the Application
+
+1. **Build the project**:
+   ```bash
+   mvn clean install
+   ```
+
+2. **Run the application**:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+3. **Access the application**:
+   The application will start on `http://localhost:8080`
 
 ---
 
@@ -161,7 +241,7 @@ The system exposes a RESTful API with role-based access control.
 ---
 
 📌 **Note:** A full Postman collection is provided in  
-`/docs/LibraryAPI.postman_collection.json`.
+`LibraryManagementSystem.postman_collection.json`.
 
 ---
 
