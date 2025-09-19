@@ -31,8 +31,7 @@ public class SecurityConfig {
             "/api/categories/**",
             "/api/books/**",
             "/api/publishers/**",
-            "/api/authors/**",
-            "/api/transactions/**"
+            "/api/authors/**"
     };
 
     private static final String[] STAFF_ENDPOINTS = {
@@ -58,9 +57,7 @@ public class SecurityConfig {
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .requestMatchers(ADMIN_ENDPOINTS).hasAuthority("ADMIN")
                         .requestMatchers(LIBRARIAN_ENDPOINTS).hasAnyAuthority("ADMIN", "LIBRARIAN")
-
-                        .requestMatchers("/api/members/**", "/api/transactions/**")
-                        .hasAnyAuthority("ADMIN", "LIBRARIAN", "STAFF")
+                        .requestMatchers(STAFF_ENDPOINTS).hasAnyAuthority("STAFF","ADMIN", "LIBRARIAN")
 
                         .anyRequest().authenticated()
                 )
