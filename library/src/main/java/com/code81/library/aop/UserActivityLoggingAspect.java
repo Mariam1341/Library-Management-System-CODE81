@@ -19,12 +19,8 @@ import java.time.LocalDateTime;
 public class UserActivityLoggingAspect {
 
     private final UserActivityLogService logService;
-
-    // يلقط أي ميثود متعلمة بـ @LogActivity
     @Pointcut("@annotation(com.code81.library.aop.LogActivity)")
     public void logActivityMethods() {}
-
-    // يلقط create/update/delete
     @Pointcut("execution(* com.code81.library.service.*.create*(..)) || " +
             "execution(* com.code81.library.service.*.update*(..)) || " +
             "execution(* com.code81.library.service.*.delete*(..))")
@@ -37,11 +33,19 @@ public class UserActivityLoggingAspect {
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
+
         LogActivity annotation = method.getAnnotation(LogActivity.class);
 
-        String action = (annotation != null && !annotation.action().isEmpty())
-                ? annotation.action()
-                : signature.getName().toUpperCase();
+        String action;
+        if (annotation != null && !annotation.action().isEmpty()) {
+             action = annotation.action();
+        } else {
+            String methodName = signature.getName();
+            String formatted = methodName
+                    .replaceAll("([a-z])([A-Z]+)", "$1_$2")
+                    .toUpperCase();
+            action = formatted;
+        }
 
         String details = String.format(
                 "Action: %s | Class: %s | Method: %s | Time: %s",
@@ -53,4 +57,5 @@ public class UserActivityLoggingAspect {
 
         logService.log(username, action, details);
     }
+
 }
