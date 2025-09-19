@@ -23,10 +23,8 @@ public class BorrowingTransactionDTO {
     @NotNull(message = "ProcessedBy (SystemUser) is required")
     private Long processedBy;
 
-    @NotNull(message = "BorrowedAt is required")
     private LocalDateTime borrowedAt;
 
-    @NotNull(message = "DueDate is required")
     private LocalDateTime dueDate;
 
     private LocalDateTime returnedAt;

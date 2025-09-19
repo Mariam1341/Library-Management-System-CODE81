@@ -17,6 +17,49 @@ public class SystemUserController {
 
     private final SystemUserService userService;
 
+    // ====== Create Librarian ======
+    @PostMapping("/librarians")
+    public ResponseEntity<ApiResponse<SystemUserDTO>> createLibrarian(@RequestBody SystemUserDTO userDTO) {
+        return ResponseEntity.ok(
+                new ApiResponse<>(true, "Librarian created successfully",
+                        userService.createUser(userDTO, Role.LIBRARIAN))
+        );
+    }
+
+    // ====== Create Staff ======
+    @PostMapping("/staff")
+    public ResponseEntity<ApiResponse<SystemUserDTO>> createStaff(@RequestBody SystemUserDTO userDTO) {
+        return ResponseEntity.ok(
+                new ApiResponse<>(true, "Staff created successfully",
+                        userService.createUser(userDTO, Role.STAFF))
+        );
+    }
+
+    // ====== Create Admin ======
+    @PostMapping("/admins")
+    public ResponseEntity<ApiResponse<SystemUserDTO>> createAdmin(@RequestBody SystemUserDTO userDTO) {
+        return ResponseEntity.ok(
+                new ApiResponse<>(true, "Admin created successfully",
+                        userService.createUser(userDTO, Role.ADMIN))
+        );
+    }
+    // ====== Update User ======
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<SystemUserDTO>> updateUser(
+            @PathVariable Long id,
+            @RequestBody SystemUserDTO userDTO) {
+        return ResponseEntity.ok(
+                new ApiResponse<>(true, "User updated successfully",
+                        userService.updateUser(id, userDTO))
+        );
+    }
+    // ====== Delete User ======
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok(new ApiResponse<>(true, "User deleted successfully", null));
+    }
+
     // ====== Get All Librarians ======
     @GetMapping("/librarians")
     public ResponseEntity<ApiResponse<List<SystemUserDTO>>> getAllLibrarians() {

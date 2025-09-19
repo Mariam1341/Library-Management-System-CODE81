@@ -1,5 +1,6 @@
 package com.code81.library.service.impl;
 
+import com.code81.library.aop.LogActivity;
 import com.code81.library.dto.BorrowingTransactionDTO;
 import com.code81.library.entity.Book;
 import com.code81.library.entity.BorrowingTransaction;
@@ -45,6 +46,7 @@ public class BorrowingTransactionServiceImpl implements BorrowingTransactionServ
         return transactionMapper.toDTO(transactionRepository.save(updated));
     }
     @Override
+    @LogActivity(action = "BORROW_BOOK")
     public BorrowingTransactionDTO borrowBook(BorrowingTransactionDTO dto) {
         Book book = bookRepository.findById(dto.getBookId())
                 .orElseThrow(() -> new RuntimeException("Book not found"));
@@ -64,6 +66,7 @@ public class BorrowingTransactionServiceImpl implements BorrowingTransactionServ
        return createTransaction(dto);
     }
     @Override
+    @LogActivity(action = "RETURN_BOOK")
     public BorrowingTransactionDTO returnBook(Long transactionId) {
         BorrowingTransactionDTO dto = getTransactionById(transactionId);
 
